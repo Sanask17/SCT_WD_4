@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simple To-Do App</title>
+<style>
+  body { font-family: Arial,sans-serif; max-width:400px; margin:20px auto; }
+  input, button { padding:8px; font-size:16px; }
+  ul { padding-left:0; list-style:none; }
+  li { display:flex; align-items:center; gap:8px; border-bottom:1px solid #b2cd2b; padding:6px 0; }
+  li.completed span.text { text-decoration: line-through; color: rgb(218, 227, 100); }
+  span.text { flex-grow:1; }
+  input[type="date"], input[type="time"] { font-size:14px; }
+  button { cursor:pointer; }
+</style>
+</head>
+<body>
+<h2>To-Do List</h2>
+<input id="taskText" placeholder="Task description" />
+<input id="taskDate" type="date" />
+<input id="taskTime" type="time" />
+<button id="addBtn">Add</button>
+<ul id="taskList"></ul>
+<script>
+  const addBtn = document.getElementById('addBtn'),
+        taskText = document.getElementById('taskText'),
+        taskDate = document.getElementById('taskDate'),
+        taskTime = document.getElementById('taskTime'),
+        taskList = document.getElementById('taskList');
+  function createTask(text, date, time) {
+    if (!text.trim()) return;
+    const li = document.createElement('li');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.onchange = () => li.classList.toggle('completed', checkbox.checked);
+    const spanText = document.createElement('span');
+    spanText.textContent = text;
+    spanText.className = 'text';
+    spanText.contentEditable = true;
+    spanText.spellcheck = false;
+    const dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    dateInput.value = date;
+    const timeInput = document.createElement('input');
+    timeInput.type = 'time';
+    timeInput.value = time;
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Del';
+    delBtn.onclick = () => li.remove();
+    li.append(checkbox, spanText, dateInput, timeInput, delBtn);
+    taskList.appendChild(li);
+    taskText.value = '';
+    taskDate.value = '';
+    taskTime.value = '';
+    taskText.focus();
+  }
+  addBtn.onclick = () => createTask(taskText.value, taskDate.value, taskTime.value);
+  taskText.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      createTask(taskText.value, taskDate.value, taskTime.value);
+      e.preventDefault();
+    }
+  });
+</script>
+
+</body>
+</html>
